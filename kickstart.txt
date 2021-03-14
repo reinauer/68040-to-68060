@@ -1,0 +1,40 @@
+
+If using a full 68060 with FPU, Kickstart needs to be patched to disable the FPU before the CPU checks or system will crash.
+FPU can be enabled later by software.
+
+
+I just wanted to simply patch the original A500/A2000 3.1 40.63 Kickstart to disable the 060 FPU.
+
+Here is my patch:
+
+Use your favorite hex editor and change the following 3 bytes:
+0x00000c37: 0x00 to 0x02
+0x00000c3b: 0x01 to 0x08
+0x0007ffeb: 0xf6 to 0xed 
+
+MD5SUMs
+Original: e40a5dfb3d017ba8779faba30cbd1c8e
+Patched : 042ca916577aa286c3578b47dd8f0654
+
+
+Technical details
+
+The following Kickstart address appears to be a perfect place to disable the 060 FPU:
+
+0x00f80c36  7000         moveq #0,%d0
+0x00f80c38  4e7b 0801    movec %d0,%vbr
+
+I assume the VBR is already at 0x00000000 from reset, so this is just to detect 68010 and higher, which doesn't matter for
+a 68060 system. The VBR setting can be changed to disable the 060 CPU instead, with the same number of bytes:
+
+0x00f80c36  7002         moveq #2,%d0
+0x00f80c38  4e7b 0808    movec %d0,%pcr
+
+Of course, this will now crash any non-68060, at least in FS-UAE, but works with both EC/LC and full 68060 variants. In
+addition to disabling the FPU by enabling PCR.DFP (section 3.2.2.5), PCR.ESS (Enable Superscalar Dispatch) is enabled as well.
+
+To fix the Kickstart checksum after patching, simply treat the Kickstart like a collection of longwords. The longword at
+0x00000c34 needs to be increased from 0x224f7000 to 0x224f7002, that adds 2 to any longword sum, and the longword at
+0x00000c38 increased from 0x4e7b0801 to 0x4e7b0808, that adds 7, so total of 9 has been added to any sum. So the new checksum
+goes from 0x9fdeeef6 to 0x9fdeeed, a decrease of 9 to offset the instruction byte increases.
+
