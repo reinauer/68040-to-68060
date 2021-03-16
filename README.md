@@ -51,7 +51,7 @@ Further reading on my adventures building these:
 
 ## Bill of Materials
 
-Here's the [Bill of Materials (BOM)](bom.html).
+Here's the [Bill of Materials (BOM)](https://htmlpreview.github.io/?https://raw.githubusercontent.com/reinauer/68040-to-68060/main/bom.html).
 
 ## Make your own
 
