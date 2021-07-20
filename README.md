@@ -48,6 +48,7 @@ cleaner and more reproducible.
 Further reading on my adventures building these:
 * [68040 to 68060 – Upformation](https://amiga.technology/2021/01/18/68040-to-68060-upformation/)
 * [Finding common GND](https://amiga.technology/2021/02/25/finding-common-gnd/)
+* [All good things](https://amiga.technology/2021/03/21/all-good-things/)
 
 ## Bill of Materials
 
